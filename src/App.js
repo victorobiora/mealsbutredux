@@ -5,15 +5,22 @@ import Notification from './components/UI/Notification';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, Fragment } from 'react'
 import { mealActions } from './store/redux-store';
+import { getLoadingData } from './store/cart-thunks';
 
 function App() {
 
    const dispatch = useDispatch()
+   const isChanged = useSelector(state => state.cart.isChanged) 
    const cart = useSelector(state => state.cart.addedMealsList) 
   const isCartShown = useSelector(state => state.cart.showCart)
   const notification = useSelector(state => state.meals.showNotifications)
 
 console.log(notification)
+
+useEffect(()=> {
+
+     dispatch(getLoadingData())
+}, [dispatch])
 
   useEffect(()=> {
  
@@ -44,15 +51,18 @@ console.log(notification)
 
    console.log(data)
     }
-    fectchData().catch(err => [
+    if(isChanged){
+  fectchData().catch(err => {
       dispatch(mealActions.setNotification({
         title: 'error',
         status: 'error',
         message: 'Cart data failed to send'
       }))
 
-    ])
-  }, [cart, dispatch])
+  })
+    }
+ 
+  }, [cart, dispatch, isChanged])
   return (
     <Fragment>
         {notification && <Notification status = {notification.status}

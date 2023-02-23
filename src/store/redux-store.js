@@ -30,6 +30,7 @@ const CartInitialState = {
     addedMealsList: [],
     totalPrice: 0,
     showCart: false,
+    isChanged: false
 
 }
 
@@ -43,7 +44,12 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState: CartInitialState,
     reducers: {
+        replaceCart(state, action){
+            console.log(action.payload)
+      state.addedMealsList = action.payload       
+        },
         addToCart(state, action) {
+           state.isChanged = true
             // First check that meals array is empty then add meal to cart
             if (state.addedMealsList.length === 0) {
                 state.addedMealsList.push(action.payload)
@@ -62,13 +68,14 @@ const cartSlice = createSlice({
             }
         },
         increment: (state, action) => {
-
+             state.isChanged = true
             let cIndex = state.addedMealsList.findIndex(element => element.id === action.payload)
             state.addedMealsList[cIndex].amount++
             state.addedMealsList[cIndex].totPrice =
                 state.addedMealsList[cIndex].totPrice + state.addedMealsList[cIndex].price
         },
         decrement: (state, action) => {
+            state.isChanged = true
             let cIndex = state.addedMealsList.findIndex(element => element.id === action.payload)
             if (state.addedMealsList[cIndex].amount === 1) {
                 state.addedMealsList.splice(state.addedMealsList[cIndex], 1)
