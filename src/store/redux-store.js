@@ -29,11 +29,13 @@ const meals = [{
 const CartInitialState = {
     addedMealsList: [],
     totalPrice: 0,
-    showCart: false
+    showCart: false,
+
 }
 
 const mealsInitialState = {
-    initMealsList: meals
+    initMealsList: meals,
+    showNotifications: null
 
 }
 
@@ -78,6 +80,7 @@ const cartSlice = createSlice({
 
         },
         showCart(state, action) {
+            console.log('cart was shown')
             state.showCart = !state.showCart;
         }
     }
@@ -87,11 +90,18 @@ const mealSlice = createSlice({
     name: 'meals',
     initialState: mealsInitialState,
     reducers: {
+     setNotification(state, action){
+                    state.showNotifications = 
+                    { status: action.payload.status,
+                      message: action.payload.message,
+                      title: action.payload.title,
+                    }
+            }
     }
 })
 
 const cartActions = cartSlice.actions
-
+const mealActions = mealSlice.actions
 
 
 const store = configureStore({
@@ -101,5 +111,5 @@ const store = configureStore({
     }
 })
 
-export { cartActions }
+export { cartActions, mealActions }
 export default store;
